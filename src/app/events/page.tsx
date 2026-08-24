@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { API_URL } from "@/lib/config";
 
-type Event = {
+export type Event = {
   id: number;
   title: string;
   date: string;

@@ -10,6 +10,7 @@ import {
   Users,
   LogOut,
   X,
+  Megaphone
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -25,6 +26,7 @@ const navItems: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "internships", label: "Internships", icon: Briefcase },
   { id: "certificates", label: "Certificates", icon: Award },
   { id: "teams", label: "Join Teams", icon: Users },
+  {id: "events", label: "Events", icon: Megaphone}
 ];
 
 export default function Sidebar({

@@ -100,7 +100,7 @@ export default function JoinTeams() {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">Join a Team</h2>
+        <h2 className="text-xl font-bold text-gray-900">Join a Team</h2>
         <p className="text-sm text-gray-400">
           Pick a department you want to contribute to
         </p>

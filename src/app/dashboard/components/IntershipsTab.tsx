@@ -44,7 +44,7 @@ export default function InternshipsTab() {
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">Internships</h2>
+        <h2 className="text-xl font-bold text-gray-900">Internships</h2>
         <p className="text-sm text-gray-400">
           Opportunities curated by ASVA for members
         </p>

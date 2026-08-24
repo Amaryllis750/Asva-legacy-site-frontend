@@ -41,7 +41,7 @@ export default function DocumentsTab() {
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">Documents</h2>
+        <h2 className="text-xl font-bold text-gray-900">Documents</h2>
         <p className="text-sm text-gray-400">
           Files and resources shared by ASVA
         </p>
