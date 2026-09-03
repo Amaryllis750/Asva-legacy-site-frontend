@@ -40,7 +40,7 @@ export default function CertificatesTab() {
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">Certificates</h2>
+        <h2 className="text-xl font-bold text-gray-900">Certificates</h2>
         <p className="text-sm text-gray-400">
           Your ASVA achievements and recognitions
         </p>

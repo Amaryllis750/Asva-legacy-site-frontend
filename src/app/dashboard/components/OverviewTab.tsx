@@ -8,6 +8,7 @@ import {
   Briefcase,
   Award,
   Users,
+  Megaphone
 } from "lucide-react";
 
 import { authFetch } from "@/lib/api";
@@ -31,22 +32,26 @@ export default function OverviewTab({ onNavigate }: Props) {
 
   const [recentDocs, setRecentDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [recentEvents, setRecentEvents] = useState<any[]>([]);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [docsRes, linksRes, internRes, certsRes] = await Promise.all([
-          authFetch(`${API_URL}/api/cms/documents`),
-          authFetch(`${API_URL}/api/cms/links`),
-          authFetch(`${API_URL}/api/cms/internships`),
-          authFetch(`${API_URL}/api/cms/certificates`),
-        ]);
+        const [docsRes, linksRes, internRes, certsRes, eventsRes] =
+          await Promise.all([
+            authFetch(`${API_URL}/api/cms/documents`),
+            authFetch(`${API_URL}/api/cms/links`),
+            authFetch(`${API_URL}/api/cms/internships`),
+            authFetch(`${API_URL}/api/cms/certificates`),
+            authFetch(`${API_URL}/api/cms/events`),
+          ]);
 
-        const [docs, links, internships, certs] = await Promise.all([
+        const [docs, links, internships, certs, events] = await Promise.all([
           docsRes.json(),
           linksRes.json(),
           internRes.json(),
           certsRes.json(),
+          eventsRes.json(),
         ]);
 
         setCounts({
@@ -57,6 +62,7 @@ export default function OverviewTab({ onNavigate }: Props) {
         });
 
         setRecentDocs(docs.slice(0, 3));
+        setRecentEvents(events.slice(0, 3));
       } catch {
         // silent fail
       } finally {
@@ -112,7 +118,6 @@ export default function OverviewTab({ onNavigate }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-
       {/* HERO CARD */}
       <Card className="relative overflow-hidden border-zinc-800 bg-zinc-950 p-8">
         <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 via-transparent to-purple-500/10 blur-3xl" />
@@ -154,7 +159,7 @@ export default function OverviewTab({ onNavigate }: Props) {
                 className={cn(
                   "w-10 h-10 rounded-xl flex items-center justify-center",
                   s.bg,
-                  s.color
+                  s.color,
                 )}
               >
                 <Icon size={18} />
@@ -162,7 +167,7 @@ export default function OverviewTab({ onNavigate }: Props) {
 
               <div className="mt-3">
                 <p className="text-2xl font-semibold text-white">
-                  {loading ? "—" : s.value ?? "→"}
+                  {loading ? "—" : (s.value ?? "→")}
                 </p>
                 <p className="text-xs text-zinc-400">{s.label}</p>
               </div>
@@ -177,13 +182,10 @@ export default function OverviewTab({ onNavigate }: Props) {
 
       {/* BOTTOM GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
         {/* RECENT DOCS */}
         <Card className="border-zinc-800 bg-zinc-950 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-white">
-              Recent Documents
-            </h3>
+            <h3 className="text-sm font-medium text-white">Recent Documents</h3>
 
             <Button
               variant="ghost"
@@ -198,10 +200,7 @@ export default function OverviewTab({ onNavigate }: Props) {
           <div className="flex flex-col gap-3">
             {loading &&
               [1, 2, 3].map((i) => (
-                <Skeleton
-                  key={i}
-                  className="h-10 bg-zinc-900 rounded-lg"
-                />
+                <Skeleton key={i} className="h-10 bg-zinc-900 rounded-lg" />
               ))}
 
             {!loading && recentDocs.length === 0 && (
@@ -215,12 +214,52 @@ export default function OverviewTab({ onNavigate }: Props) {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white truncate">
-                    {doc.title}
-                  </p>
+                  <p className="text-sm text-white truncate">{doc.title}</p>
                   <p className="text-xs text-zinc-500">
                     {new Date(doc.created_at).toLocaleDateString()}
                   </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* RECENT EVENTS */}
+        <Card className="border-zinc-800 bg-zinc-950 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-white font-medium text-sm">
+              {" "}
+              Explore All Events{" "}
+            </h3>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onNavigate("events")}
+              className="text-green-400 hover:text-green-300"
+            >
+              See all <ChevronRight size={14} />
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {loading &&
+              [1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-10 bg-zinc-900 rounded-lg" />
+              ))}
+
+            {!loading && recentEvents.length === 0 && (
+              <p className="text-sm text-zinc-500">No events yet.</p>
+            )}
+
+            {recentEvents.map((event) => (
+              <div key={event.id} className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                  <Megaphone size={14} className="text-orange-500" />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-white truncate">{event.title}</p>
                 </div>
               </div>
             ))}

@@ -40,7 +40,7 @@ export default function LinksTab() {
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white">Links</h2>
+        <h2 className="text-xl font-bold text-gray-900">Links</h2>
         <p className="text-sm text-gray-400">
           Useful resources and portals shared by ASVA
         </p>

@@ -14,7 +14,8 @@ export type Tab =
   | "links"
   | "internships"
   | "certificates"
-  | "teams";
+  | "teams"
+  | "events";
 
   export type Certificate = {
   id: number;
