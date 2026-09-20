@@ -19,6 +19,7 @@ export default function SignUpStep({
   username: "",
   email: "",
   password: "",
+  phone_number: ""
 });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -28,6 +29,7 @@ export default function SignUpStep({
   { name: "username", label: "Username", type: "text" },
   { name: "email", label: "Email", type: "email" },
   { name: "password", label: "Password", type: "password" },
+  {name: "phone_number", label: "Phone Number", type: "text"}
 ];
 
   const validate = () => {
@@ -63,6 +65,7 @@ export default function SignUpStep({
         username: form.username,
         email: form.email,
         password: form.password,
+        phone_number: form.phone_number
       }),
     });
 
