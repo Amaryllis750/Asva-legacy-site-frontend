@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import StepIndicator from "./components/StepIndicator";
 import SignUpStep from "./components/SignUpStep";
 import PaymentStep from "./components/PaymentStep";
+import * as reactDynamic from "next/dynamic";
+const PaystackStep = reactDynamic.default(() => import('./components/PaystackStep').then((c)=> c.default), {ssr: false})
 import PendingStep from "./components/PendingStep";
 import { Step, FormData } from "./components/types";
 
@@ -49,7 +51,7 @@ export default function JoinPage() {
         )}
 
         {step === 2 && (
-          <PaymentStep
+          <PaystackStep
             form={formData}
             onNext={() => setStep(3)}
           />
