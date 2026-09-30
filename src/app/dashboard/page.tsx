@@ -14,6 +14,9 @@ import { Tab } from "@/app/join/components/types";
 import EventsTab from "./components/EventsTab";
 import { API_URL } from "@/lib/config";
 import { authFetch } from "@/lib/api";
+import * as reactDynamic from "next/dynamic";
+const IncompletePayment = reactDynamic.default(() => import('./components/IncompletePayment').then((c)=> c.default), {ssr: false})
+
 
 export const dynamic = "force-dynamic";
 
@@ -95,8 +98,6 @@ export default function DashboardPage() {
       </div>
     </div>
   ) : (
-    <div className="text-white">
-      Payment is not complete
-    </div>
+    <IncompletePayment email={"daniel@gmail.com"}/>
   )
 }
