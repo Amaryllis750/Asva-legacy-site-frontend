@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
-import { useRouter, usePathname, useSearchParams  } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import OverviewTab from "./components/OverviewTab";
 import DocumentsTab from "./components/DocumentsTab";
@@ -12,12 +12,18 @@ import CertificatesTab from "./components/CertificatesTab";
 import JoinTeams from "./components/JoinTeams";
 import { Tab } from "@/app/join/components/types";
 import EventsTab from "./components/EventsTab";
+import { API_URL } from "@/lib/config";
+import { authFetch } from "@/lib/api";
+import * as reactDynamic from "next/dynamic";
+const IncompletePayment = reactDynamic.default(() => import('./components/IncompletePayment').then((c)=> c.default), {ssr: false})
+
 
 export const dynamic = "force-dynamic";
 
 export default function DashboardPage() {
   const searchParams = useSearchParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isProfileActive, setIsProfileActive] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -28,20 +34,34 @@ export default function DashboardPage() {
     internships: "Internships",
     certificates: "Certificates",
     teams: "Join Teams",
-    events: "Events"
+    events: "Events",
   };
 
-  const tabParam = searchParams.get('tab') as Tab;
+  const tabParam = searchParams.get("tab") as Tab;
   const activeTab: Tab = tabParam || "overview";
 
   const handleTabSelect = (newTab: Tab) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", newTab);
     router.push(`${pathname}?${params}`, { scroll: false });
-  }
-  
+  };
 
-  return (
+  useEffect(() => {
+    async function getProfile() {
+      try {
+        const response = await authFetch(`${API_URL}/api/me/profile`);
+        const profile = await response.json();
+        const is_active: boolean = profile.is_active;
+        setIsProfileActive(is_active);
+      } catch {
+        // silent fail
+      }
+    }
+    getProfile();
+  }, []);
+
+  
+  return isProfileActive ? (
     <div className="flex h-screen bg-gray-50">
       <Sidebar
         active={activeTab}
@@ -65,7 +85,9 @@ export default function DashboardPage() {
         </header>
 
         <main className="flex-1 p-6 overflow-y-auto">
-          {activeTab === "overview" && <OverviewTab onNavigate={handleTabSelect} />}
+          {activeTab === "overview" && (
+            <OverviewTab onNavigate={handleTabSelect} />
+          )}
           {activeTab === "documents" && <DocumentsTab />}
           {activeTab === "links" && <LinksTab />}
           {activeTab === "internships" && <InternshipsTab />}
@@ -75,5 +97,7 @@ export default function DashboardPage() {
         </main>
       </div>
     </div>
-  );
+  ) : (
+    <IncompletePayment email={"daniel@gmail.com"}/>
+  )
 }
