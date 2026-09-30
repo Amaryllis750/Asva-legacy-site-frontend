@@ -22,7 +22,6 @@ export async function initializePayment(paymentData: PaymentObject) {
       body: JSON.stringify({
         email: paymentData.email,
         amount: `${paymentData.amount}`,
-        payment_channel: paymentData.payment_channel,
         description: paymentData.description,
         idempotency_key: idempotencyKey,
         purpose: paymentData.purpose
